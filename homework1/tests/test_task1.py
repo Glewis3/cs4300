@@ -4,7 +4,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../s
 import task1
 
 def test_hello_world(capsys):
-    # run the main function from task1
+    # run the main function from task 1
     task1.main()
     
     # capture the output straight from the console
