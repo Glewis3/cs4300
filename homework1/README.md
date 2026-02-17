@@ -1,4 +1,4 @@
-# CS 4300 by Gary Lewis
+# CS 4300 Homework1 by Gary Lewis
 
 ## Create and run the virtual env
     python3 -m venv venv --system-site-packages
