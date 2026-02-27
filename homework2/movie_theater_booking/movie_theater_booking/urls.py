@@ -19,4 +19,6 @@ from django.urls import path
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    #This points any web request starting with /api/ to our bookings app
+    path('api/', include('bookings.urls')),
 ]
