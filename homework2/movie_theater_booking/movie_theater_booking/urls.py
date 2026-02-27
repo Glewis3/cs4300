@@ -15,10 +15,15 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
+from bookings import views as ui_views # Import the new UI views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     #This points any web request starting with /api/ to our bookings app
     path('api/', include('bookings.urls')),
+
+    path('', ui_views.movie_list, name='movie_list'), # The new homepage
+    path('book/<int:movie_id>/', ui_views.book_seat, name='book_seat'),
+    path('history/', ui_views.booking_history, name='booking_history'),
 ]
