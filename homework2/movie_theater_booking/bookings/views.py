@@ -25,8 +25,28 @@ def movie_list(request):
     return render(request, 'bookings/movie_list.html', {'movies': movies})
 
 def book_seat(request, movie_id):
-    # We will pass the movie_id so the user knows what they are booking
-    return render(request, 'bookings/seat_booking.html', {'movie_id': movie_id})
+    movie = get_object_or_404(Movie, id=movie_id)
+    # Only show seats that haven't been booked yet
+    available_seats = Seat.objects.filter(is_booked=False)
+    
+    # If the user clicks the 'Submit' button on the form
+    if request.method == 'POST':
+        seat_id = request.POST.get('seat')
+        seat = get_object_or_404(Seat, id=seat_id)
+        
+        # Grab the first user in the database to act as our test user
+        user = User.objects.first() 
+        
+        if user and not seat.is_booked:
+            # Create the ticket!
+            Booking.objects.create(movie=movie, seat=seat, user=user)
+            # Mark the seat as taken
+            seat.is_booked = True
+            seat.save()
+            # Send them to the history page to see their ticket
+            return redirect('booking_history')
+
+    return render(request, 'bookings/seat_booking.html', {'movie': movie, 'seats': available_seats})
 
 def booking_history(request):
     return render(request, 'bookings/booking_history.html')
