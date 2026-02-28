@@ -1,23 +1,35 @@
-def book_seat(request, movie_id):
-    movie = get_object_or_404(Movie, id=movie_id)
-    # Only show seats that haven't been booked yet
-    available_seats = Seat.objects.filter(is_booked=False)
-    
-    # If the user clicks the 'Submit' button on the form
-    if request.method == 'POST':
-        seat_id = request.POST.get('seat')
-        seat = get_object_or_404(Seat, id=seat_id)
-        
-        # Grab the first user in the database to act as our test user
-        user = User.objects.first() 
-        
-        if user and not seat.is_booked:
-            # Create the ticket!
-            Booking.objects.create(movie=movie, seat=seat, user=user)
-            # Mark the seat as taken
-            seat.is_booked = True
-            seat.save()
-            # Send them to the history page to see their ticket
-            return redirect('booking_history')
+{% extends 'bookings/base.html' %}
 
-    return render(request, 'bookings/seat_booking.html', {'movie': movie, 'seats': available_seats})
+{% block title %} Book a Seat {% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow border-0 rounded-3 mt-4">
+            <div class="card-header bg-primary text-white text-center py-3">
+                <h4 class="mb-0">Book Ticket: {{ movie.title }}</h4>
+            </div>
+            <div class="card-body p-4">
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="mb-4">
+                        <label for="seat" class="form-label fw-bold">Select an Available Seat</label>
+                        <select name="seat" id="seat" class="form-select form-select-lg" required>
+                            <option value="" disabled selected>-- Choose a seat --</option>
+                            {% for seat in seats %}
+                                <option value="{{ seat.id }}">Seat {{ seat.seat_number }}</option>
+                            {% empty %}
+                                <option value="" disabled>No seats available for this movie!</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-success btn-lg rounded-pill fw-bold">Confirm Booking</button>
+                        <a href="{% url 'movie_list' %}" class="btn btn-outline-secondary rounded-pill">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

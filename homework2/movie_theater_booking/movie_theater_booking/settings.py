@@ -27,6 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*', '.onrender.com']
 
+CSRF_TRUSTED_ORIGINS = ['https://app-glewis-21.devedu.io']
 
 # Application definition
 

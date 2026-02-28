@@ -25,5 +25,6 @@ urlpatterns = [
 
     path('', ui_views.movie_list, name='movie_list'), # The new homepage
     path('book/<int:movie_id>/', ui_views.book_seat, name='book_seat'),
-    path('history/', ui_views.booking_history, name='booking_history'),
+    path('history/', ui_views.booking_history, name='booking_history'), 
+    path('cancel/<int:booking_id>/', ui_views.cancel_booking, name='cancel_booking'),
 ]
